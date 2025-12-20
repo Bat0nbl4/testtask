@@ -42,10 +42,13 @@ git clone <repository-url>
 </VirtualHost>
 ```
 
-## Настройка базы данных
+## Настройка
+### База данных
 - Импортировать [SQL дамп](testtask_db.sql)
 - Настроить подключение в файле конфигурации [db_conn.php](public/config/db_conn.php)
-- Настроить [config.php](public/config/config.php)
+
+### Прочие конфиги
+Настроить [config.php](public/config/config.php)
 
 В APP_DOMEN необходимо указать домен, по которому доступно это приложение.
 
@@ -56,46 +59,46 @@ BASE_PATH и USE_BASE_PATH используются, когда корневой
 ## Структура проекта
 ```text
 public/
-├── config/                 # Конфигурационные файлы
-├── controllers/           # Контроллеры MVC
-│   ├── admin/            # Административные контроллеры
-│   ├── catch/            # Обработчики ошибок
-│   ├── main/             # Основные контроллеры
-│   └── user/             # Контроллеры пользователей
-├── middleware/           # Middleware для авторизации
-├── public/              # Публичная директория (DocumentRoot)
+├── config/             # Конфигурационные файлы
+├── controllers/        # Контроллеры MVC
+│   ├── admin/          # Административные контроллеры
+│   ├── catch/          # Обработчики ошибок
+│   ├── main/           # Основные контроллеры
+│   └── user/           # Контроллеры пользователей
+├── middleware/         # Middleware для авторизации
+├── public/             # Публичная директория (DocumentRoot)
 │   └── index.php       # Точка входа
-├── resources/           # Ресурсы приложения
+├── resources/          # Ресурсы приложения
 │   └── render/         # Шаблоны и компоненты
-│       ├── components/  # Компоненты представления
-│       ├── templates/   # Основные шаблоны
-│       └── views/       # Представления (view)
+│       ├── components/ # Компоненты представления
+│       ├── templates/  # Основные шаблоны
+│       └── views/      # Представления (view)
 ├── storage/            # Хранилище (сессии, кэш, логи)
-│   └── sessions/      # Файлы сессий
+│   └── sessions/       # Файлы сессий
 ├── vendor/             # Ядро фреймворка (самописное)
-│   ├── data_base/     # Классы работы с БД
-│   ├── helpers/       # Вспомогательные классы
-│   ├── middleware/    # Базовый middleware
-│   ├── rendering/     # Система шаблонов
-│   ├── routing/       # Маршрутизатор
-│   ├── security/      # Безопасность (хэши)
-│   └── session/       # Работа с сессиями
-└── README.md          # Эта документация
+│   ├── data_base/      # Классы работы с БД
+│   ├── helpers/        # Вспомогательные классы
+│   ├── middleware/     # Базовый middleware
+│   ├── rendering/      # Система шаблонов
+│   ├── routing/        # Маршрутизатор
+│   ├── security/       # Безопасность (хэши)
+│   └── session/        # Работа с сессиями
+└── README.md           # Эта документация
 ```
 
 # Архитектура приложения
 
 ## MVC Паттерн
 Приложение построено на архитектуре MVC (Model-View-Controller):
-- Модель (Model): Классы DB и QueryBuilder для работы с базой данных.
+- Модель (Model): Классы [DB](public/vendor/data_base/DB.php) и [QueryBuilder](public/vendor/data_base/QueryBuilder.php) для работы с базой данных.
 - Представление (View):
     - [Темплейты](public/resources/render/templates/). Осоновной и единсвенный темплейт - [app.php](public/resources/render/templates/app.php)
     - [Компонеты](public/resources/render/components/)
     - [Страницы (вьюхи)](public/resources/render/views/)
-- Контроллер (Controller): Классы в директориях controllers/
+- Контроллер (Controller): Классы в директориях [controllers/](public/controllers/)
 
 ## Роутинг
-Маршрутизация осуществляется через класс Router:
+Маршрутизация осуществляется через класс [Router](public/vendor/routing/Router.php):
 - Статические методы Router::get() и Router::post()
 - Группировка роутов через Router::group()
 - Именованные маршруты для генерации URL
@@ -113,15 +116,16 @@ public/
 
 # Работа с приложением
 ## Аутентификация
-1. Перейдите на /user/login
-2. Введите логин/пароль администратора (admin/admin123)
-3. После успешной аутентификации доступен интерфейс
+1. Перейдите на 
+> GET /user/login
+2. Введите логин/пароль администратора (admin/admin123).
+3. После успешной аутентификации доступен интерфейс.
 
 ## Просмотр списка пользователей
 - Доступ:
 > GET /admin/user/listpage=*страница пагинации*
-- Пагинация: 10 записей на страницу
-- Сортировка: по ID в порядке убывания
+- Пагинация: 10 записей на страницу.
+- Сортировка: по ID в порядке убывания.
 
 ## Создание пользователя
 1. Перейдите:
